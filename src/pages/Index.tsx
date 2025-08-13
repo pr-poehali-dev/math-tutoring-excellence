@@ -4,10 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Icon from "@/components/ui/icon";
+import { useState } from "react";
 
 const Index = () => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    setMobileMenuOpen(false);
   };
 
   return (
@@ -16,6 +20,8 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="font-heading text-2xl font-bold text-primary">МатемаТика ⚡</div>
+            
+            {/* Десктопное меню */}
             <div className="hidden md:flex space-x-6">
               {['about', 'courses', 'teacher', 'signup', 'faq', 'reviews'].map((section) => (
                 <button
@@ -32,7 +38,39 @@ const Index = () => {
                 </button>
               ))}
             </div>
+
+            {/* Мобильная кнопка меню */}
+            <Button
+              variant="ghost"
+              size="sm"
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              <Icon name={mobileMenuOpen ? "X" : "Menu"} size={24} />
+            </Button>
           </div>
+
+          {/* Мобильное меню */}
+          {mobileMenuOpen && (
+            <div className="md:hidden mt-4 pb-4 border-t">
+              <div className="flex flex-col space-y-3 pt-4">
+                {['about', 'courses', 'teacher', 'signup', 'faq', 'reviews'].map((section) => (
+                  <button
+                    key={section}
+                    onClick={() => scrollToSection(section)}
+                    className="text-left text-gray-600 hover:text-primary transition-colors font-medium py-2 px-2 hover:bg-primary/5 rounded-lg"
+                  >
+                    {section === 'about' && 'О занятиях'}
+                    {section === 'courses' && 'Программа'}
+                    {section === 'teacher' && 'Преподаватель'}
+                    {section === 'signup' && 'Записаться'}
+                    {section === 'faq' && 'FAQ'}
+                    {section === 'reviews' && 'Отзывы'}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </nav>
 
